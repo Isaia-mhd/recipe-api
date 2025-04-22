@@ -78,7 +78,7 @@ class UserController extends Controller
         if(!$userInfo)
         {
             return response()->json([
-                "message" => "Room Does Not Exist"
+                "message" => "User does not exist"
             ],  404);
         }
 

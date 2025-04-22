@@ -24,6 +24,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         Gate::define("update-role", fn($user) => $user->role === "admin");
         Gate::define("delete-user", fn($user, $userInfo) => $user->id === $userInfo->id);
+        Gate::define("update-recipe", fn($user, $userOwnerId) => $user->id === $userOwnerId);
+        Gate::define("delete-recipe", fn($user, $userOwnerId) => $user->id === $userOwnerId);
 
     }
 }
