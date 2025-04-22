@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -24,6 +25,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware("auth:sanctum")->group(function () {
 
+    // FAVORITES
+    Route::get("favorites", [FavoriteController::class, "index"]);
+    Route::post("favorites/new/recipe/{recipe}", [FavoriteController::class, "store"]);
+    Route::delete("favorites/delete/{favorite}", [FavoriteController::class, "destroy"]);
+
+
+    // RECIPES
     Route::get("recipes", [RecipeController::class,"index"]);
     Route::get("recipes/show/{recipe}", [RecipeController::class,"show"]);
     Route::post("recipes/new", [RecipeController::class,"store"]);

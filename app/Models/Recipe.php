@@ -24,4 +24,9 @@ class Recipe extends Model
     {
         return $this->belongsToMany(Category::class, 'recipe_category');
     }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Favorite::class);
+    }
 }
