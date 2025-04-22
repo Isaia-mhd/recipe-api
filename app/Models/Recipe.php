@@ -29,4 +29,9 @@ class Recipe extends Model
     {
         return $this->belongsToMany(Favorite::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class);
+    }
 }
