@@ -144,6 +144,8 @@ return [
         // 'store' => 'redis',
     ],
 
+    'front_end_url' => env("FRONT_END_URL", "http://localhost:5173"),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
