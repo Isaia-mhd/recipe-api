@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReviewRequest;
 use App\Models\Recipe;
 use App\Models\Reviews;
+use App\Notifications\NewReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -34,6 +35,9 @@ class ReviewController extends Controller
             "rating" => $request->rating
         ]);
 
+        $review->recipe->user->notify(new NewReview($review));
+
+
         return response()->json([
             "message" => "Review placed.",
             "review" => $review
@@ -61,7 +65,7 @@ class ReviewController extends Controller
                 "message" => "Unauthorized."
             ], 401);
         }
-        
+
         $review->delete();
 
         return response()->json([
