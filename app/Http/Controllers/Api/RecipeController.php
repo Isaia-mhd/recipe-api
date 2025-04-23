@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRecipeRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Category;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,8 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
-
+        
+        $categoryIds = Category::whereIn('name', $request->category_names)->pluck('id')->toArray();
         $userId = Auth::user()->id;
         $recipe = Recipe::create([
             "user_id" => $userId,
@@ -37,9 +39,11 @@ class RecipeController extends Controller
             "instructions" => $request->instructions
         ]);
 
+        $recipe->categories()->attach($categoryIds);
+
         return response()->json([
             "message"=> "Recipe Posted successfully.",
-            "recipe" => $recipe
+            "recipe" => $recipe->load("categories")
         ],200);
     }
 
