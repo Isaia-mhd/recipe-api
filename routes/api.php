@@ -36,6 +36,8 @@ Route::middleware("auth:sanctum")->group(function () {
      Route::put("/users/update/{user}", [UserController::class, "update"]);
      Route::put("/users/update-role/{user}", [UserController::class, "updateRole"]);
      Route::delete("/users/destroy/{user}", [UserController::class, "destroy"]);
+     Route::post("/logout", [AuthController::class, "logout"]);
+
 });
 
 Route::middleware("guest")->group(function () {
@@ -44,4 +46,8 @@ Route::middleware("guest")->group(function () {
     Route::post("/reset-password", [AuthController::class, "resetPassword"]);
     Route::post("/login", [AuthController::class, "login"]);
     Route::post("/register", [UserController::class, "store"]);
+});
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });

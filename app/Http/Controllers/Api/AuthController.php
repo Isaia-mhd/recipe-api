@@ -8,6 +8,7 @@ use App\Http\Requests\LoginUserRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Password;
@@ -27,18 +28,24 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $token = $user->createToken($user->name)->plainTextToken;
+        Auth::login($user);
+
+        $user->createToken($user->name)->plainTextToken;
 
         return response()->json([
-            "message" => "User Logged In Succesfully!",
+            "message" => "User Logged In Successfully!",
             "user" => $user,
-            "token" => $token
         ]);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        // Invalider la session de l'utilisateur
+        Auth::guard('web')->logout();
+
+        // Supprimer les cookies d'authentification
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json([
             'success' => true,

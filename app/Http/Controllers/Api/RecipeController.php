@@ -28,7 +28,7 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
-        
+
         $categoryIds = Category::whereIn('name', $request->category_names)->pluck('id')->toArray();
         $userId = Auth::user()->id;
         $recipe = Recipe::create([
