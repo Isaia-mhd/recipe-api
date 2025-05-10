@@ -18,7 +18,7 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        $recipes = Recipe::with("reviews", "user")->orderBy("created_at", "DESC")->get();
+        $recipes = Recipe::with("reviews.user", "user")->orderBy("created_at", "DESC")->get();
 
         return response()->json(["recipes" => $recipes], 200);
     }
@@ -30,13 +30,30 @@ class RecipeController extends Controller
     {
 
         $categoryIds = Category::whereIn('name', $request->category_names)->pluck('id')->toArray();
-        $userId = Auth::user()->id;
+        // $userId = Auth::user()->id;
+
+        request()->validate([
+            "images.*" => "image|mimes:jpeg,png,jpg,gif,svg|max:2048"
+        ]);
+
+        $imagePaths = [];
+        if(request()->hasFile('images'))
+        {
+            foreach (request()->file('images') as $image) {
+                $path = $image->store('recipes', 'public');
+                $imagePaths[] = 'storage/'.$path;
+            }
+        }
+
+
+
         $recipe = Recipe::create([
-            "user_id" => $userId,
+            "user_id" => 2,
             "title" => $request->title,
             "description" => $request->description,
             "ingredients" => $request->ingredients,
-            "instructions" => $request->instructions
+            "instructions" => $request->instructions,
+            "images" => json_encode($imagePaths, JSON_FORCE_OBJECT)
         ]);
 
         $recipe->categories()->attach($categoryIds);

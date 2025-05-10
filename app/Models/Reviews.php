@@ -12,7 +12,12 @@ class Reviews extends Model
     protected $guarded = ["id"];
 
     public function recipe()
-{
-    return $this->belongsTo(Recipe::class);
-}
+    {
+        return $this->belongsTo(Recipe::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

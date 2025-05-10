@@ -9,10 +9,11 @@ class Recipe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["user_id","title", "description", "ingredients", "instructions"];
+    protected $fillable = ["user_id","title", "description", "ingredients", "instructions", "images"];
 
     protected $casts = [
         "ingredients" => "array",
+        "images" => "json"
     ];
 
     public function user()
